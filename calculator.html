@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>웹 계산기</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 60px 20px 50px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 110px);
+  }
+  nav {
+    background:#333; 
+    padding:10px; 
+    text-align:center; 
+    position: fixed; top: 0; width: 100%;
+    z-index: 1000;
+  }
+  nav a {
+    color:#fff; 
+    margin: 0 15px; 
+    text-decoration:none;
+    font-weight: bold;
+  }
+  footer {
+    background:#333; 
+    color:#fff; 
+    text-align:center; 
+    padding:10px; 
+    position:fixed; 
+    bottom:0; 
+    width:100%;
+    font-weight: bold;
+  }
+  .calculator {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #aaa;
+  }
+  #display {
+    width: 320px;
+    height: 50px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 24px;
+    text-align: right;
+    background: #eee;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 70px);
+    grid-gap: 10px;
+  }
+  button {
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+  }
+  .number {
+    background: #9ddfd3;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+  }
+  .operator {
+    background: #f1a661;
+    border-radius: 5px;
+    width: 70px;
+    height: 70px;
+  }
+  .equals, .clear {
+    background: #f26b6b;
+    border-radius: 50% / 30%;
+    width: 70px;
+    height: 70px;
+  }
+  .clear {
+    background: #6bc5f2;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="homepage.html">초기 페이지</a>
+  <a href="eng_typewriter.html">영문 타자기</a>
+  <a href="kor_typewriter.html">한글 타자기</a>
+  <a href="calculator.html">계산기</a>
+  <a href="telephone.html">전화기</a>
+</nav>
+
+<div class="calculator">
+  <div id="display">0</div>
+  <div class="buttons">
+    <button class="number">7</button>
+    <button class="number">8</button>
+    <button class="number">9</button>
+    <button class="operator">/</button>
+
+    <button class="number">4</button>
+    <button class="number">5</button>
+    <button class="number">6</button>
+    <button class="operator">*</button>
+
+    <button class="number">1</button>
+    <button class="number">2</button>
+    <button class="number">3</button>
+    <button class="operator">-</button>
+
+    <button class="number">0</button>
+    <button class="clear">C</button>
+    <button class="equals">=</button>
+    <button class="operator">+</button>
+  </div>
+</div>
+
+<footer>
+  소속: (학번: 2402166 | 이름: 김지현)
+</footer>
+
+<script>
+  const display = document.getElementById('display');
+  let input = '';
+  let resultDisplayed = false;
+
+  document.querySelectorAll('.number, .operator').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (resultDisplayed) {
+        input = '';
+        resultDisplayed = false;
+      }
+      input += btn.textContent;
+      display.textContent = input;
+    });
+  });
+
+  document.querySelector('.equals').addEventListener('click', () => {
+    try {
+      const answer = eval(input);
+      display.textContent = answer;
+      input = answer.toString();
+      resultDisplayed = true;
+    } catch {
+      display.textContent = '오류';
+      input = '';
+    }
+  });
+
+  document.querySelector('.clear').addEventListener('click', () => {
+    input = '';
+    display.textContent = '0';
+    resultDisplayed = false;
+  });
+</script>
+
+</body>
+</html>

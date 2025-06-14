@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>한영 타자기 통합</title>
+
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 60px 20px 50px 20px;
+      margin: 0;
+      text-align: center;
+    }
+    nav {
+      background:#333; 
+      padding:10px; 
+      text-align:center; 
+      position: fixed; top: 0; width: 100%;
+      z-index: 1000;
+    }
+    nav a {
+      color:#fff; 
+      margin: 0 15px; 
+      text-decoration:none;
+      font-weight: bold;
+    }
+    footer {
+      background:#333; 
+      color:#fff; 
+      text-align:center; 
+      padding:10px; 
+      position:fixed; 
+      bottom:0; 
+      width:100%;
+      font-weight: bold;
+    }
+
+    .info {
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .keyboard {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    .key {
+        padding: 15px;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        cursor: default;
+        user-select: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        display: inline-block;
+    }
+    .group1 { background-color: #ffadad; }
+    .group2 { background-color: #ffd6a5; }
+    .group3 { background-color: #fdffb6; }
+    .group4 { background-color: #caffbf; }
+    .toggle-key {
+        grid-column: span 2;
+        background-color: #bbbbbb;
+        cursor: pointer;
+        user-select: none;
+        font-weight: bold;
+    }
+    .highlight {
+        background-color: yellow !important;
+        transition: background-color 0.3s ease;
+    }
+    #Display {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        min-height: 40px;
+        background-color: #fff;
+        text-align: left;
+        font-size: 1.4rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+        user-select: text;
+        min-height: 80px;
+        line-height: 1.5;
+    }
+
+    /* Footer 스타일 */
+    footer.site-footer {
+        margin-top: auto;
+        padding: 15px 20px;
+        background-color: #333;
+        color: #eee;
+        text-align: center;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        user-select: none;
+    }
+</style>
+
+</head>
+<body>
+
+<nav>
+  <a href="homepage.html">초기 페이지</a>
+  <a href="eng_typewriter.html">영문 타자기</a>
+  <a href="kor_typewriter.html">한글 타자기</a>
+  <a href="calculator.html">계산기</a>
+  <a href="telephone.html">전화기</a>
+</nav>
+
+<h1></h1>
+<div id="keyboard" class="keyboard" aria-label="타자기 키보드">
+    <label id="toggleKey" class="key toggle-key" tabindex="0" role="button" aria-pressed="false">한/영</label>
+
+    <!-- 영어 키 (기본 display) -->
+    <label class="key group1 eng-key" data-key="1">1</label>
+    <label class="key group1 eng-key" data-key="2">2</label>
+    <label class="key group1 eng-key" data-key="3">3</label>
+    <label class="key group1 eng-key" data-key="4">4</label>
+    <label class="key group1 eng-key" data-key="5">5</label>
+    <label class="key group1 eng-key" data-key="6">6</label>
+    <label class="key group1 eng-key" data-key="7">7</label>
+    <label class="key group1 eng-key" data-key="8">8</label>
+    <label class="key group1 eng-key" data-key="9">9</label>
+    <label class="key group1 eng-key" data-key="0">0</label>
+
+    <label class="key group2 eng-key" data-key="q">q</label>
+    <label class="key group2 eng-key" data-key="w">w</label>
+    <label class="key group2 eng-key" data-key="e">e</label>
+    <label class="key group2 eng-key" data-key="r">r</label>
+    <label class="key group2 eng-key" data-key="t">t</label>
+    <label class="key group2 eng-key" data-key="y">y</label>
+    <label class="key group2 eng-key" data-key="u">u</label>
+    <label class="key group2 eng-key" data-key="i">i</label>
+    <label class="key group2 eng-key" data-key="o">o</label>
+    <label class="key group2 eng-key" data-key="p">p</label>
+
+    <label class="key group3 eng-key" data-key="a">a</label>
+    <label class="key group3 eng-key" data-key="s">s</label>
+    <label class="key group3 eng-key" data-key="d">d</label>
+    <label class="key group3 eng-key" data-key="f">f</label>
+    <label class="key group3 eng-key" data-key="g">g</label>
+    <label class="key group3 eng-key" data-key="h">h</label>
+    <label class="key group3 eng-key" data-key="j">j</label>
+    <label class="key group3 eng-key" data-key="k">k</label>
+    <label class="key group3 eng-key" data-key="l">l</label>
+
+    <label class="key group4 eng-key" data-key="z">z</label>
+    <label class="key group4 eng-key" data-key="x">x</label>
+    <label class="key group4 eng-key" data-key="c">c</label>
+    <label class="key group4 eng-key" data-key="v">v</label>
+    <label class="key group4 eng-key" data-key="b">b</label>
+    <label class="key group4 eng-key" data-key="n">n</label>
+    <label class="key group4 eng-key" data-key="m">m</label>
+    <label class="key group4 eng-key" data-key=",">,</label>
+    <label id="dotKey" class="key group4 eng-key" data-key=".">.</label>
+
+    <!-- 한글 키 (초기에는 숨김) -->
+    <label class="key group1 kor-key" style="display:none;">ㅂ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅈ</label>
+    <label class="key group1 kor-key" style="display:none;">ㄷ</label>
+    <label class="key group1 kor-key" style="display:none;">ㄱ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅅ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅛ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅕ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅑ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅐ</label>
+    <label class="key group1 kor-key" style="display:none;">ㅔ</label>
+
+    <label class="key group2 kor-key" style="display:none;">ㅁ</label>
+    <label class="key group2 kor-key" style="display:none;">ㄴ</label>
+    <label class="key group2 kor-key" style="display:none;">ㅇ</label>
+    <label class="key group2 kor-key" style="display:none;">ㄹ</label>
+    <label class="key group2 kor-key" style="display:none;">ㅎ</label>
+    <label class="key group2 kor-key" style="display:none;">ㅗ</label>
+    <label class="key group2 kor-key" style="display:none;">ㅓ</label>
+    <label class="key group2 kor-key" style="display:none;">ㅏ</label>
+    <label class="key group2 kor-key" style="display:none;">ㅣ</label>
+    <label class="key group2 kor-key" style="display:none;">.</label>
+
+    <label class="key group3 kor-key" style="display:none;">ㅋ</label>
+    <label class="key group3 kor-key" style="display:none;">ㅌ</label>
+    <label class="key group3 kor-key" style="display:none;">ㅊ</label>
+    <label class="key group3 kor-key" style="display:none;">ㅍ</label>
+    <label class="key group3 kor-key" style="display:none;">ㅠ</label>
+    <label class="key group3 kor-key" style="display:none;">ㅜ</label>
+    <label class="key group3 kor-key" style="display:none;">ㅡ</label>
+</div>
+
+<div id="Display" role="textbox" aria-label="타자기 입력 내용" tabindex="0"></div>
+
+<script>
+    // 한/영 상태 변수
+    let isKorean = false;
+
+    // 완성형 한글 조합 객체
+    const CHOSUNG = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+    const JUNGSUNG = ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
+    const JONGSUNG = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+
+    // 한글 조합 함수 (간단 구현)
+    function combineHangul(c1, c2, c3) {
+        const choIndex = CHOSUNG.indexOf(c1);
+        const jungIndex = JUNGSUNG.indexOf(c2);
+        const jongIndex = JONGSUNG.indexOf(c3 || "");
+        if (choIndex < 0 || jungIndex < 0) return null;
+        const unicode = 0xAC00 + (choIndex * 21 * 28) + (jungIndex * 28) + jongIndex;
+        return String.fromCharCode(unicode);
+    }
+
+    const keyboard = document.getElementById("keyboard");
+    const display = document.getElementById("Display");
+    const toggleKey = document.getElementById("toggleKey");
+
+    // 현재 입력 중인 자모 저장용 (조합)
+    let composing = { cho: "", jung: "", jong: "" };
+
+    // 키보드의 모든 키 라벨
+    const engKeys = document.querySelectorAll(".eng-key");
+    const korKeys = document.querySelectorAll(".kor-key");
+
+    // 한/영 토글
+    function toggleLanguage() {
+        isKorean = !isKorean;
+        toggleKey.setAttribute("aria-pressed", isKorean ? "true" : "false");
+        if (isKorean) {
+            engKeys.forEach(k => k.style.display = "none");
+            korKeys.forEach(k => k.style.display = "inline-block");
+        } else {
+            engKeys.forEach(k => k.style.display = "inline-block");
+            korKeys.forEach(k => k.style.display = "none");
+            composing = { cho: "", jung: "", jong: "" }; // 조합 초기화
+        }
+    }
+    toggleKey.addEventListener("click", toggleLanguage);
+    toggleKey.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleLanguage();
+        }
+    });
+
+    // 한글 조합 함수 (간단하게 초성, 중성, 종성 조합)
+    function processKoreanInput(char) {
+        if (!composing.cho) {
+            if (CHOSUNG.includes(char)) {
+                composing.cho = char;
+                return null;
+            } else {
+                return char;
+            }
+        } else if (composing.cho && !composing.jung) {
+            if (JUNGSUNG.includes(char)) {
+                composing.jung = char;
+                return null;
+            } else {
+                const out = composing.cho;
+                composing.cho = "";
+                return out + char;
+            }
+        } else if (composing.cho && composing.jung) {
+            if (JONGSUNG.includes(char)) {
+                composing.jong = char;
+                const combined = combineHangul(composing.cho, composing.jung, composing.jong);
+                composing = { cho: "", jung: "", jong: "" };
+                return combined;
+            } else {
+                const combined = combineHangul(composing.cho, composing.jung, "");
+                composing = { cho: "", jung: "", jong: "" };
+                return combined + char;
+            }
+        }
+        return char;
+    }
+
+    // 키 클릭 처리
+    keyboard.addEventListener("click", e => {
+        if (e.target.classList.contains("key") && !e.target.classList.contains("toggle-key")) {
+            let char = e.target.textContent;
+            if (isKorean) {
+                const res = processKoreanInput(char);
+                if (res) display.textContent += res;
+            } else {
+                display.textContent += char;
+            }
+            flashKey(e.target);
+        }
+    });
+
+    // 키보드 이벤트 처리 (영문과 한글 모두 지원)
+    document.addEventListener("keydown", e => {
+        if (e.repeat) return;
+        // 한/영 토글은 Shift + Space 등으로 막기 위해 직접 구현하지 않고 토글키로만 가능
+        const key = e.key.toLowerCase();
+
+        // 화면에 있는 키 중 일치하는 키 탐색
+        let targetKey = null;
+        if (isKorean) {
+            korKeys.forEach(k => {
+                if (k.textContent === key) targetKey = k;
+            });
+        } else {
+            engKeys.forEach(k => {
+                if (k.textContent === key) targetKey = k;
+            });
+        }
+        if (!targetKey) {
+            if (key === "backspace") {
+                e.preventDefault();
+                display.textContent = display.textContent.slice(0, -1);
+            }
+            return;
+        }
+
+        e.preventDefault();
+        if (isKorean) {
+            const res = processKoreanInput(targetKey.textContent);
+            if (res) display.textContent += res;
+        } else {
+            display.textContent += targetKey.textContent;
+        }
+        flashKey(targetKey);
+    });
+
+    // 키 반짝임 효과
+    function flashKey(keyElem) {
+        keyElem.classList.add("highlight");
+        setTimeout(() => {
+            keyElem.classList.remove("highlight");
+        }, 200);
+    }
+</script>
+
+<footer>
+  소속: (학번: 2402166 | 이름: 김지현)
+</footer>
+
+</body>
+</html>

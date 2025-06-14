@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>영문 타자기 시뮬레이터</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f0f0f0;
+      padding: 60px 20px 50px 20px;
+      margin: 0;
+      text-align: center;
+    }
+    nav {
+      background:#333;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    nav a.active {
+      color: #ffc107;
+      text-decoration: underline;
+    }
+    footer {
+      background:#333;
+      color:#fff;
+      text-align:center;
+      padding:10px;
+      position:fixed;
+      bottom:0;
+      width:100%;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+    label.paper {
+      display: block;
+      width: 100%;
+      max-width: 900px;
+      min-height: 150px;
+      background-color: white;
+      border: 2px solid #ccc;
+      padding: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 20px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      margin: 40px auto 30px;
+      color: #212529;
+      box-sizing: border-box;
+      text-align: left;
+    }
+    .keyboard {
+      display: inline-block;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .key-row {
+      margin-bottom: 8px;
+    }
+    .key {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      line-height: 40px;
+      text-align: center;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      user-select: none;
+      background-color: #6c757d;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 600;
+      transition: background-color 0.2s;
+      margin: 0 2px;
+      display: inline-block;
+    }
+    .key:hover {
+      background-color: #5a6268;
+    }
+    /* 키 색상 그룹 */
+    .group1 { background-color: #3498db; } /* 숫자 */
+    .group2 { background-color: #2ecc71; } /* Q~P */
+    .group3 { background-color: #e67e22; } /* A~; */
+    .group4 { background-color: #9b59b6; } /* Z~/ */
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="homepage.html">초기 페이지</a>
+  <a href="eng_typewriter.html" class="active">영문 타자기</a>
+  <a href="kor_typewriter.html">한글 타자기</a>
+  <a href="calculator.html">계산기</a>
+  <a href="telephone.html">전화기</a>
+</nav>
+
+<label class="paper" id="paperLabel"></label>
+
+<div class="keyboard" aria-label="영문 타자기 키보드">
+  <div class="key-row">
+    <button class="key group1">1</button>
+    <button class="key group1">2</button>
+    <button class="key group1">3</button>
+    <button class="key group1">4</button>
+    <button class="key group1">5</button>
+    <button class="key group1">6</button>
+    <button class="key group1">7</button>
+    <button class="key group1">8</button>
+    <button class="key group1">9</button>
+    <button class="key group1">0</button>
+  </div>
+  <div class="key-row">
+    <button class="key group2">q</button>
+    <button class="key group2">w</button>
+    <button class="key group2">e</button>
+    <button class="key group2">r</button>
+    <button class="key group2">t</button>
+    <button class="key group2">y</button>
+    <button class="key group2">u</button>
+    <button class="key group2">i</button>
+    <button class="key group2">o</button>
+    <button class="key group2">p</button>
+  </div>
+  <div class="key-row">
+    <button class="key group3">a</button>
+    <button class="key group3">s</button>
+    <button class="key group3">d</button>
+    <button class="key group3">f</button>
+    <button class="key group3">g</button>
+    <button class="key group3">h</button>
+    <button class="key group3">j</button>
+    <button class="key group3">k</button>
+    <button class="key group3">l</button>
+    <button class="key group3">;</button>
+  </div>
+  <div class="key-row">
+    <button class="key group4">z</button>
+    <button class="key group4">x</button>
+    <button class="key group4">c</button>
+    <button class="key group4">v</button>
+    <button class="key group4">b</button>
+    <button class="key group4">n</button>
+    <button class="key group4">m</button>
+    <button class="key group4">,</button>
+    <button class="key group4">.</button>
+    <button class="key group4">/</button>
+  </div>
+</div>
+
+<footer>
+  소속: (학번: 2402166 | 이름: 김지현)
+</footer>
+
+<script>
+  const label = document.getElementById("paperLabel");
+  let buffer = [];
+
+  document.querySelectorAll('.key').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const char = btn.textContent;
+      buffer.push(char);
+      render();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const allowed = /^[a-z0-9;,.\/]$/;
+    if (allowed.test(e.key)) {
+      buffer.push(e.key);
+      render();
+    } else if (e.key === 'Backspace') {
+      buffer.pop();
+      render();
+    }
+  });
+
+  function render() {
+    label.textContent = buffer.join('');
+  }
+</script>
+
+</body>
+</html>

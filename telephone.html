@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>순수 HTML 전화기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 60px 20px 50px 20px;
+      text-align: center;
+    }
+    nav {
+      background:#333; 
+      padding:10px; 
+      text-align:center; 
+      position: fixed; top: 0; width: 100%;
+      z-index: 1000;
+    }
+    nav a {
+      color:#fff; 
+      margin: 0 15px; 
+      text-decoration:none;
+      font-weight: bold;
+    }
+    footer {
+      background:#333; 
+      color:#fff; 
+      text-align:center; 
+      padding:10px; 
+      position:fixed; 
+      bottom:0; 
+      width:100%;
+      font-weight: bold;
+    }
+    #display {
+      font-size: 24px;
+      margin-bottom: 20px;
+      padding: 10px;
+      width: 280px;
+      background-color: #ffffff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      display: inline-block;
+      user-select:none;
+    }
+    .phone-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 10px;
+      justify-content: center;
+      user-select:none;
+    }
+    .button {
+      width: 80px;
+      height: 80px;
+      font-size: 24px;
+      background-color: #ddd;
+      border: 2px solid #aaa;
+      border-radius: 10px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    .button:active {
+      background-color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="homepage.html">초기 페이지</a>
+  <a href="eng_typewriter.html">영문 타자기</a>
+  <a href="kor_typewriter.html">한글 타자기</a>
+  <a href="calculator.html">계산기</a>
+  <a href="telephone.html">전화기</a>
+</nav>
+
+<div id="display">전화번호: </div>
+
+<div class="phone-buttons">
+  <div class="button">1</div>
+  <div class="button">2</div>
+  <div class="button">3</div>
+  <div class="button">4</div>
+  <div class="button">5</div>
+  <div class="button">6</div>
+  <div class="button">7</div>
+  <div class="button">8</div>
+  <div class="button">9</div>
+  <div class="button">*</div>
+  <div class="button">0</div>
+  <div class="button">#</div>
+</div>
+
+<footer>
+  소속: (학번: 2402166 | 이름: 김지현)
+</footer>
+
+<script>
+  const display = document.getElementById('display');
+  const buttons = document.querySelectorAll('.button');
+  let numberOnly = ""; // 숫자만 저장
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const char = button.textContent;
+
+      // 숫자만 입력받기
+      if (!/^\d$/.test(char)) return;
+
+      // 최대 11자리까지 제한
+      if (numberOnly.length >= 11) return;
+
+      numberOnly += char;
+
+      // 하이픈 형식 적용
+      let formatted = formatPhoneNumber(numberOnly);
+      display.textContent = '전화번호: ' + formatted;
+    });
+  });
+
+  function formatPhoneNumber(num) {
+    if (num.length <= 3) {
+      return num;
+    } else if (num.length <= 7) {
+      return num.slice(0, 3) + '-' + num.slice(3);
+    } else {
+      return num.slice(0, 3) + '-' + num.slice(3, 7) + '-' + num.slice(7);
+    }
+  }
+</script>
+
+</body>
+</html>
